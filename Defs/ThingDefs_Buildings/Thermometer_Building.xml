@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <ThingDef ParentName="FurnitureBase">
+		<defName>RimworldThermometer</defName>
+		<label>Thermometer</label>
+		<description>A device that shows the current temperature of the room</description>
+		<thingClass>RimworldThermometer.RThermometer</thingClass>
+        <designationCategory>Temperature</designationCategory>
+		<graphicData>
+			<texPath>Thermometer/Thermometer</texPath>
+			<graphicClass>Graphic_Multi</graphicClass>
+			<drawSize>(0.8,0.8)</drawSize>
+		</graphicData>
+		<tickerType>Normal</tickerType>
+		<altitudeLayer>Building</altitudeLayer>
+        <clearBuildingArea>false</clearBuildingArea>
+		<fillPercent>1</fillPercent>
+		<coversFloor>true</coversFloor>
+		<passability>Standable</passability>
+		<blockWind>false</blockWind>
+		<blockLight>false</blockLight>
+		<canOverlapZones>true</canOverlapZones>
+		<castEdgeShadows>false</castEdgeShadows>
+		<staticSunShadowHeight>0</staticSunShadowHeight>
+        <stuffCategories>
+            <li>Metallic</li>
+        </stuffCategories>
+        <costStuffCount>50</costStuffCount>
+		<statBases>
+            <MaxHitPoints>20</MaxHitPoints>
+            <Mass>1</Mass>
+            <WorkToBuild>1250</WorkToBuild>
+            <Flammability>0</Flammability>
+        </statBases>
+		<size>(1,1)</size>
+        <defaultPlacingRot>South</defaultPlacingRot>
+        <researchPrerequisites>
+            <li>Electricity</li>
+        </researchPrerequisites>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+            <preventDeteriorationInside>true</preventDeteriorationInside>
+            <preventDeteriorationOnTop>true</preventDeteriorationOnTop>
+            <ignoreStoredThingsBeauty>true</ignoreStoredThingsBeauty>
+			<canPlaceOverWall>false</canPlaceOverWall>
+		</building>
+        <designationHotKey>Misc12</designationHotKey>
+        <surfaceType>Item</surfaceType>
+	</ThingDef>
+</Defs>
