@@ -62,7 +62,7 @@ namespace RimworldThermometer
 
         public override void Tick()
         {
-            if (tickReducer>30)
+            if (tickReducer > 30)
             {
                 isWallMounted = (this.Map != null) ? this.Position.Impassable(this.Map) : false;
                 TempSourcePoint = !isWallMounted ? this.Position : this.Position + new IntVec3(0, 0, -1);
@@ -73,8 +73,7 @@ namespace RimworldThermometer
                 {
                     var sourcePoint = this.TempSourcePoint.GetEdifice(this.Map);
                     var flags = sourcePoint?.def?.graphicData?.linkFlags;
-                    if ((flags != null) && (flags & LinkFlags.Wall) != 0)
-                        isBlocked = true;
+                    isBlocked = ((flags != null) && (flags & LinkFlags.Wall) != 0);
                 }
                 else
                     isBlocked = false;
