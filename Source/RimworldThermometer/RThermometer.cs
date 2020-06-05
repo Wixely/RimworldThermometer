@@ -53,6 +53,7 @@ namespace RimworldThermometer
         public override void SpawnSetup(Map map, bool respawningAfterLoad)
         {
             base.SpawnSetup(map, respawningAfterLoad);
+            isBlocked = false;
             if (base.Faction != Faction.OfPlayer)
             {
                 DisplayEnabled = false;
