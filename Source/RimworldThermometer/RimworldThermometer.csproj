@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PlaceWorker_OnWall.cs" />
     <Compile Include="RThermometer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

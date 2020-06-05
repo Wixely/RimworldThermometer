@@ -25,20 +25,19 @@ namespace RimworldThermometer
     public class RThermometer : Building
     {
         float lastDetectedTemperature = 0;
-
         public string TemperatureMode = "Personnel";
-
+        public bool isWallMounted = false;
+        public bool isBlocked = false;
+        public IntVec3 TempSourcePoint;
         public Dictionary<string, Tuple<int, int>> Modes = new Dictionary<string, Tuple<int, int>>() {
             { "Personnel" , new Tuple<int, int>(0, 100) },
             { "Food" , new Tuple<int, int>(-10,20) },
             { "Extreme" , new Tuple<int, int>(-300, 300) }
         };
-
         public bool DisplayEnabled = true;
-
-        public Color ColdColour = Color.blue;// new Color(181, 220, 255);
-        //public Color ColdColour =  new Color(181, 220, 255, 1);
-        public Color HotColour = Color.red;// new Color(255, 220, 181);
+        public Color ColdColour = Color.blue;
+        public Color HotColour = Color.red;
+        public int tickReducer = int.MaxValue;
 
         public string NextMode()
         {
@@ -62,7 +61,25 @@ namespace RimworldThermometer
 
         public override void Tick()
         {
-            lastDetectedTemperature = this.AmbientTemperature;
+            if (tickReducer>30)
+            {
+                isWallMounted = (this.Map != null) ? this.Position.Impassable(this.Map) : false;
+                TempSourcePoint = !isWallMounted ? this.Position : this.Position + new IntVec3(0, 0, -1);
+                lastDetectedTemperature = (this.Map != null) ? TempSourcePoint.GetRoom(this.Map)?.Temperature ?? 0 : 0;
+                if (!isWallMounted)
+                    isBlocked = false;
+                else if (isWallMounted && this.Map != null)
+                {
+                    var sourcePoint = this.TempSourcePoint.GetEdifice(this.Map);
+                    var flags = sourcePoint?.def?.graphicData?.linkFlags;
+                    if ((flags != null) && (flags & LinkFlags.Wall) != 0)
+                        isBlocked = true;
+                }
+                else
+                    isBlocked = false;
+                tickReducer = 0;
+            }
+            tickReducer++;
             base.Tick();
         }
 
@@ -106,7 +123,6 @@ namespace RimworldThermometer
                 };
             }
             yield break;
-            yield break;
         }
 
         public float RangeLerp(float input, float min, float max)
@@ -124,15 +140,21 @@ namespace RimworldThermometer
 
                 var ranges = Modes[TemperatureMode];
                 var normal = RangeLerp(lastDetectedTemperature, ranges.Item1, ranges.Item2);
-
-                var labelColor = Color.Lerp(ColdColour, HotColour, normal);
-                labelColor.r += 0.5f; // Brighten
-                labelColor.g += 0.5f; // Brighten
-                labelColor.b += 0.5f; // Brighten
                 var position = DrawPos.MapToUIPosition();
                 position.y -= halfHeight;
 
-                GenMapUI.DrawThingLabel(position, text, labelColor);
+                if (!isBlocked)
+                {
+                    var labelColor = Color.Lerp(ColdColour, HotColour, normal);
+                    labelColor.r += 0.5f; // Brighten
+                    labelColor.g += 0.5f; // Brighten
+                    labelColor.b += 0.5f; // Brighten
+                    GenMapUI.DrawThingLabel(position, text, labelColor);
+                }
+                else
+                {
+                    GenMapUI.DrawThingLabel(position, "Blocked!", Color.white);
+                }
             }
         }
 
@@ -146,7 +168,12 @@ namespace RimworldThermometer
             var ranges = Modes[TemperatureMode];
             stringBuilder.AppendLine($"Mode: {TemperatureMode}");
             stringBuilder.AppendLine($"Range: {ranges.Item1}/{ranges.Item2}");
-            stringBuilder.Append($"Temperature: {GenText.ToStringTemperature(lastDetectedTemperature)}");
+            if (isWallMounted)
+                stringBuilder.AppendLine($"(Wall Mounted)");
+            if (!isBlocked)
+                stringBuilder.Append($"Temperature: {GenText.ToStringTemperature(lastDetectedTemperature)}");
+            else
+                stringBuilder.Append($"Sensor is blocked! If placed on a wall the sensor must have a free space southward.");
             return stringBuilder.ToString();
         }
     }

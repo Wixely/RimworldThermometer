@@ -12,9 +12,9 @@
 			<drawSize>(0.8,0.8)</drawSize>
 		</graphicData>
 		<tickerType>Normal</tickerType>
-		<altitudeLayer>Building</altitudeLayer>
+		<altitudeLayer>PawnUnused</altitudeLayer>
         <clearBuildingArea>false</clearBuildingArea>
-		<fillPercent>1</fillPercent>
+		<fillPercent>0.15</fillPercent>
 		<coversFloor>true</coversFloor>
 		<passability>Standable</passability>
 		<blockWind>false</blockWind>
@@ -42,9 +42,14 @@
             <preventDeteriorationInside>true</preventDeteriorationInside>
             <preventDeteriorationOnTop>true</preventDeteriorationOnTop>
             <ignoreStoredThingsBeauty>true</ignoreStoredThingsBeauty>
-			<canPlaceOverWall>false</canPlaceOverWall>
+			<canPlaceOverWall>true</canPlaceOverWall>
+			<isEdifice>false</isEdifice>
 		</building>
         <designationHotKey>Misc12</designationHotKey>
         <surfaceType>Item</surfaceType>
+		<placeWorkers>
+		  <li>RimworldThermometer.PlaceWorker_OnWall</li>
+		</placeWorkers>
+		<drawPlaceWorkersWhileSelected>true</drawPlaceWorkersWhileSelected>
 	</ThingDef>
 </Defs>
